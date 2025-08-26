@@ -1,33 +1,58 @@
-
+// Get the canvas and its context
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreDisplay = document.getElementById('score');
 const highScoreDisplay = document.getElementById('high-score');
 const retryBtn = document.getElementById('retryBtn');
 
-// GAME CONSTANS
+// Get the new button elements
+const upBtn = document.getElementById('up-btn');
+const downBtn = document.getElementById('down-btn');
+const leftBtn = document.getElementById('left-btn');
+const rightBtn = document.getElementById('right-btn');
+
+// Game constants
 const gridSize = 20;
 let snakeSpeed = 100; // milliseconds
 let score = 0;
 let highScore = localStorage.getItem('snakeHighScore') || 0;
 let gameLoopInterval;
 
-// SNAKE PROPERTIES
+// Snake properties
 let snake = [];
 let food = {};
-let dx = gridSize; 
-let dy = 0;      
+let dx = gridSize; // direction x
+let dy = 0;      // direction y
 let changingDirection = false;
-let snakeColor; 
+let snakeColor; // New variable to store the snake's color
 
+// Update the high score display initially
 highScoreDisplay.textContent = highScore;
 
+// Event listener for the retry button
 retryBtn.addEventListener('click', startGame);
 
+// Add event listeners for the mobile control buttons
+upBtn.addEventListener('click', () => {
+    // Simulate a keyboard event with the Up Arrow key code
+    changeDirection({ keyCode: 38 });
+});
+downBtn.addEventListener('click', () => {
+    changeDirection({ keyCode: 40 });
+});
+leftBtn.addEventListener('click', () => {
+    changeDirection({ keyCode: 37 });
+});
+rightBtn.addEventListener('click', () => {
+    changeDirection({ keyCode: 39 });
+});
+
+// Game start and loop
 function startGame() {
+    // Reset all game variables
     score = 0;
     scoreDisplay.textContent = score;
-    snakeSpeed = 100;
+    snakeSpeed = 100; // Reset speed for a new game
     snake = [
         { x: 200, y: 200 },
         { x: 180, y: 200 },
@@ -37,15 +62,18 @@ function startGame() {
     dy = 0;
     changingDirection = false;
     placeFood();
-    
+
+    // Set a random color for the snake
     setRandomSnakeColor();
 
+    // Clear any existing game loop before starting a new one
     if (gameLoopInterval) {
         clearInterval(gameLoopInterval);
     }
     gameLoopInterval = setInterval(gameLoop, snakeSpeed);
 }
 
+// Main game loop function
 function gameLoop() {
     if (gameOver()) {
         clearInterval(gameLoopInterval);
@@ -59,17 +87,20 @@ function gameLoop() {
     drawSnake();
 }
 
+// Function to draw a single snake part
 function drawSnakePart(part) {
-    ctx.fillStyle = snakeColor;
+    ctx.fillStyle = snakeColor; // Use the chosen color
     ctx.strokeStyle = 'darkgreen';
     ctx.fillRect(part.x, part.y, gridSize, gridSize);
     ctx.strokeRect(part.x, part.y, gridSize, gridSize);
 }
 
+// Function to draw the entire snake
 function drawSnake() {
     snake.forEach(drawSnakePart);
 }
 
+// Function to draw the food
 function drawFood() {
     ctx.fillStyle = 'red';
     ctx.strokeStyle = 'darkred';
@@ -77,11 +108,13 @@ function drawFood() {
     ctx.strokeRect(food.x, food.y, gridSize, gridSize);
 }
 
+// Function to clear the canvas
 function clearCanvas() {
     ctx.fillStyle = '#333';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
+// Function to move the snake
 function moveSnake() {
     const head = { x: snake[0].x + dx, y: snake[0].y + dy };
     snake.unshift(head);
@@ -96,12 +129,14 @@ function moveSnake() {
     }
 }
 
+// Function to place food on the canvas
 function placeFood() {
     food = {
         x: Math.floor(Math.random() * (canvas.width / gridSize)) * gridSize,
         y: Math.floor(Math.random() * (canvas.height / gridSize)) * gridSize,
     };
 
+    // Make sure food is not on the snake
     snake.forEach(function(part) {
         const foodIsOnSnake = part.x === food.x && part.y === food.y;
         if (foodIsOnSnake) {
@@ -110,18 +145,22 @@ function placeFood() {
     });
 }
 
+// Function to handle game over conditions
 function gameOver() {
+    // Check for collision with walls
     const hitLeftWall = snake[0].x < 0;
     const hitRightWall = snake[0].x >= canvas.width;
     const hitTopWall = snake[0].y < 0;
     const hitBottomWall = snake[0].y >= canvas.height;
-    
+
+    // Check for collision with itself
     for (let i = 4; i < snake.length; i++) {
         if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
             return true;
         }
     }
     
+    // Update the high score if the current score is higher
     if (score > highScore) {
         highScore = score;
         localStorage.setItem('snakeHighScore', highScore);
@@ -131,6 +170,7 @@ function gameOver() {
     return hitLeftWall || hitRightWall || hitTopWall || hitBottomWall;
 }
 
+// Handle keyboard input
 document.addEventListener('keydown', changeDirection);
 
 function changeDirection(event) {
@@ -166,9 +206,11 @@ function changeDirection(event) {
     }
 }
 
+// Function to set a random snake color
 function setRandomSnakeColor() {
-    const colors = ['#10e7e7ff', '#ff00ffff', '#ebeb0ddc', '#ff4400ff', '#32CD32', '#3b3b3b36', '#ffffffff', '#dfbf0dff'];
+    const colors = ['#00FFFF', '#FF00FF', '#FFFF00', '#FF4500', '#32CD32', '#4169E1'];
     snakeColor = colors[Math.floor(Math.random() * colors.length)];
 }
 
+// Start the game initially
 startGame();
