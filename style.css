@@ -3,7 +3,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
     font-family: sans-serif;
     background-color: #222;
@@ -20,6 +20,20 @@ body {
     color: white;
 }
 
+.score-container,
+.high-score-container {
+    margin-top: 15px;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.game-and-controls-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
 .game-container {
     position: relative;
     width: 400px;
@@ -29,13 +43,6 @@ body {
 canvas {
     border: 2px solid #eee;
     background-color: #333;
-}
-
-.score-container,
-.high-score-container {
-    margin-top: 15px;
-    font-size: 1.5em;
-    text-align: center;
 }
 
 #gameOverScreen {
@@ -81,7 +88,6 @@ canvas {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
 }
 
 .controls-container button {
@@ -98,4 +104,10 @@ canvas {
 
 .horizontal-controls {
     display: flex;
+}
+
+@media (max-width: 600px) {
+    .game-and-controls-container {
+        flex-direction: column;
+    }
 }
