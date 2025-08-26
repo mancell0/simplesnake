@@ -4,20 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Snake Game</title>
-    <link rel="stylesheet" href="snake.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Simple Snake Game</h1>
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div id="ad-banner">
+        </div>
     <div class="score-container">
         Score: <span id="score">0</span>
     </div>
     <div class="high-score-container">
         High Score: <span id="high-score">0</span>
     </div>
-    <div class="button-container">
-        <button id="retryBtn">RETRY</button>
+    <div class="game-container">
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        <div id="gameOverScreen" class="hidden">
+            <h2 id="gameOverText"></h2>
+            <button id="retryBtn">RETRY</button>
+        </div>
     </div>
-    <script src="logic.js"></script>
+    <div class="controls-container">
+        <button id="up-btn">↑</button>
+        <div class="horizontal-controls">
+            <button id="left-btn">←</button>
+            <button id="right-btn">→</button>
+        </div>
+        <button id="down-btn">↓</button>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
