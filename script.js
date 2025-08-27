@@ -1,4 +1,3 @@
-// --- Game State Variables ---
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreDisplay = document.getElementById('score');
@@ -7,28 +6,25 @@ const gameOverScreen = document.getElementById('gameOverScreen');
 const gameOverText = document.getElementById('gameOverText');
 const retryBtn = document.getElementById('retryBtn');
 
-// Define the grid size and cell dimensions for the game board
 const gridSize = 20;
 const cellSize = canvas.width / gridSize;
 
 let snake;
 let food;
-let dx; // horizontal direction change
-let dy; // vertical direction change
+let dx;
+let dy;
 let isGameOver = false;
 let gameLoopInterval;
 let score = 0;
-let highScore = localStorage.getItem('snakeHighScore') || 0; // Load high score from local storage
+let highScore = localStorage.getItem('snakeHighScore') || 0;
 let changingDirection = false;
 
-// Customization options
-const customizationColors = ['#00FF00', '#FF0000', '#0000FF', '#FFFF00', '#FF00FF']; // Green, Red, Blue, Yellow, Magenta
-const snakeEyes = ['⚪', '⚫', '👁️', '👀', '🟢']; // Different eye emojis for customization
+const customizationColors = ['#00FF00', '#FF0000', '#0000FF', '#FFFF00', '#FF00FF'];
+const snakeEyes = ['⚪', '⚫', '👁️', '👀', '🟢'];
 
 let snakeBodyColor = customizationColors[0];
 let snakeHeadEye = snakeEyes[0];
 
-// --- Customization UI Elements ---
 const customizeContainer = document.getElementById('customizeContainer');
 const bodyColorPicker = document.getElementById('bodyColorPicker');
 const headEyePicker = document.getElementById('headEyePicker');
@@ -43,12 +39,11 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
-// --- Game Initialization and Core Logic ---
+//GAME LOGIC
 function startGame() {
-    // Hide game over screen
     gameOverScreen.classList.add('hidden');
     
-    // Set initial game state
+    // INITIALIZE
     snake = [{ x: 10 * cellSize, y: 10 * cellSize }];
     dx = cellSize;
     dy = 0;
@@ -57,13 +52,13 @@ function startGame() {
     scoreDisplay.textContent = score;
     highScoreDisplay.textContent = highScore;
     changingDirection = false;
-    
-    // Create the first food item
+
+    //FIRST FOOD
     placeFood();
-    
-    // Start the game loop
+
+    //GAME LOOP
     if (gameLoopInterval) clearInterval(gameLoopInterval);
-    gameLoopInterval = setInterval(gameLoop, 100); // Game loop runs every 100 milliseconds
+    gameLoopInterval = setInterval(gameLoop, 100);
 }
 
 function gameLoop() {
@@ -81,7 +76,7 @@ function gameLoop() {
     drawSnake();
 }
 
-// --- Game Drawing Functions ---
+// DRAW GAME
 function drawGame() {
     // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -109,15 +104,15 @@ function drawSnake() {
     ctx.strokeStyle = 'darkgreen';
     ctx.strokeRect(head.x, head.y, cellSize, cellSize);
     
-    // Draw the selected eye emoji
-    ctx.font = `${cellSize * 0.8}px Arial`;
+    // EMOJI
+    ctx.font = `${cellSize *P 0.8}px Arial`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     
     let eyeOffsetX = cellSize / 2;
     let eyeOffsetY = cellSize / 2;
     
-    // Adjust eye position based on direction
+    // EYE MOVEMENT
     const goingUp = dy === -cellSize;
     const goingDown = dy === cellSize;
     const goingLeft = dx === -cellSize;
